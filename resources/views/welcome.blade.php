@@ -10,7 +10,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
-        <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
+        <link href="http://cdn.mwl.mx/css/app.css" rel="stylesheet">
 
         <!-- Styles -->
         <style>
@@ -77,8 +77,8 @@
                 </div>
             </div>
         </div>
-        <script src="{{ mix('/js/manifest.js') }}"></script>
-        <script src="{{ mix('/js/vendor.js') }}"></script>
-        <script src="{{ mix('/js/app.js') }}"></script>
+        <script src="http://cdn.mwl.mx/js/manifest.js"></script>
+        <script src="http://cdn.mwl.mx/js/vendor.js"></script>
+        <script src="http://cdn.mwl.mx/js/app.js"></script>
     </body>
 </html>
