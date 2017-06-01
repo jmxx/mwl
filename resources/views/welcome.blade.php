@@ -10,12 +10,12 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
-        <link href="http://cdn.mwl.mx/css/app.css" rel="stylesheet">
+        {{-- <link href="{{ cdn('/css/app.css') }}" rel="stylesheet"> --}}
 
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
+                /*background-color: #fff;*/
                 color: #636b6f;
                 font-family: 'Raleway', sans-serif;
                 font-weight: 100;
@@ -77,8 +77,9 @@
                 </div>
             </div>
         </div>
-        <script src="http://cdn.mwl.mx/js/manifest.js"></script>
-        <script src="http://cdn.mwl.mx/js/vendor.js"></script>
-        <script src="http://cdn.mwl.mx/js/app.js"></script>
+        {{-- <script src="{{ cdn('/js/manifest.js') }}"></script> --}}
+        {{-- <script src="{{ cdn('/js/vendor.js') }}"></script> --}}
+        {{-- <script src="{{ cdn('app.js') }}"></script> --}}
+        <script src="http://localhost:3000/js/app.bundle.js"></script>
     </body>
 </html>
