@@ -13,6 +13,7 @@ export default {
   appPath,
   destPath,
   entry: {
+    vendor: ['vue', 'lodash', 'axios'],
     app: [
       path.join(srcPath, 'styl/app.styl'),
       path.join(srcPath, 'js/app.js')

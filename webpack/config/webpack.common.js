@@ -1,9 +1,12 @@
 import path               from 'path';
+import webpack            from 'webpack';
 import HtmlWebpackPlugin  from 'html-webpack-plugin';
 import ExtractTextPlugin  from 'extract-text-webpack-plugin';
 import ManifestPlugin     from 'webpack-manifest-plugin';
 
 import paths from './paths';
+
+const isDev = process.env.NODE_ENV === 'local';
 
 export default {
   entry: paths.entry,
@@ -44,8 +47,8 @@ export default {
   },
   plugins: [
     new ExtractTextPlugin({
-      filename: '[name].css',
-      disable: true
+      filename: 'css/[name].css',
+      disable: isDev
     }),
 
     new ManifestPlugin(),
@@ -57,5 +60,15 @@ export default {
     //   hash: true,
     //   // chunks: ['vendors', 'app']
     // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+
+      // filename: "vendor.js"
+      // (Give the chunk a different name)
+
+      minChunks: Infinity,
+      // (with more entries, this ensures that no other module
+      //  goes into the vendor chunk)
+    })
   ]
 };

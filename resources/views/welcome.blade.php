@@ -10,7 +10,11 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
-        {{-- <link href="{{ cdn('/css/app.css') }}" rel="stylesheet"> --}}
+        @if (env('APP_ENV', 'production') === 'local')
+
+        @else
+          <link href="{{ cdn('app.css') }}" rel="stylesheet">
+        @endif
 
         <!-- Styles -->
         <style>
@@ -77,9 +81,13 @@
                 </div>
             </div>
         </div>
-        {{-- <script src="{{ cdn('/js/manifest.js') }}"></script> --}}
-        {{-- <script src="{{ cdn('/js/vendor.js') }}"></script> --}}
-        {{-- <script src="{{ cdn('app.js') }}"></script> --}}
-        <script src="http://localhost:3000/js/app.bundle.js"></script>
+        @if (env('APP_ENV', 'production') === 'local')
+          <script src="http://localhost:3000/js/vendor.bundle.js"></script>
+          <script src="http://localhost:3000/js/app.bundle.js"></script>
+        @else
+          {{-- <script src="{{ cdn('/js/manifest.js') }}"></script> --}}
+          <script src="{{ cdn('vendor.js') }}"></script>
+          <script src="{{ cdn('app.js') }}"></script>
+        @endif
     </body>
 </html>

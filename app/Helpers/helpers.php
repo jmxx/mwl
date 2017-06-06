@@ -60,6 +60,6 @@ if (!function_exists('cdn')) {
   function cdn($file) {
     return env('APP_ENV', 'production') === 'local'
       ? manifest($file)
-      : '//cdn.mwl.mx' . manifest($file);
+      : env('APP_CDN', '//cdn.mwl.mx/') . manifest($file);
   }
 }
