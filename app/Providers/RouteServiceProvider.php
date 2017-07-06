@@ -16,6 +16,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'MWL\Http\Controllers';
 
+    protected $apiNamespace = 'MWL\Api\Controllers';
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -67,7 +69,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api')
              ->middleware('api')
-             ->namespace($this->namespace)
+             ->namespace($this->apiNamespace)
              ->group(base_path('routes/api.php'));
     }
 }
