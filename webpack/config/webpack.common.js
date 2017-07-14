@@ -6,7 +6,12 @@ import ManifestPlugin     from 'webpack-manifest-plugin';
 
 import paths from './paths';
 
-const isDev = process.env.NODE_ENV === 'local';
+let isDev = process.env.NODE_ENV === 'local';
+
+const extractStyle = new ExtractTextPlugin({
+  filename: 'css/[name].css',
+  disable: isDev
+});
 
 export default {
   entry: paths.entry,
@@ -35,21 +40,28 @@ export default {
       },
       {
         test: /\.styl$/,
-        use: ExtractTextPlugin.extract({
+        use: extractStyle.extract({
           fallback: 'style-loader',
           use: [
             'css-loader',
             'stylus-loader'
           ]
         })
+      },
+      {
+        test: /\.scss$/,
+        use: extractStyle.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            'sass-loader'
+          ]
+        })
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin({
-      filename: 'css/[name].css',
-      disable: isDev
-    }),
+    extractStyle,
 
     new ManifestPlugin(),
 
