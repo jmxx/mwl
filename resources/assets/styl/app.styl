@@ -1,9 +1,19 @@
 @import './vars'
+@import './base/normalize'
+@import './base/base'
+@import './logo/logo'
+@import './utils'
+@import './layout/body'
+@import './layout/containers'
+@import './layout/wrapper'
+@import './layout/menu'
+@import './layout/header'
+@import './layout/footer'
+@import './effects/dynamic-background'
 
 html
   box-sizing border-box
+  &, body
+    margin 0
   *
     box-sizing inherit
-
-body
-  background-color $body-bg

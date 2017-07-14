@@ -1,0 +1,15 @@
+$colors = #9f0, #f90, #f09, #90f, #0f9, #09f
+$length = length($colors)
+
+// .dynamic-background
+//   animation         animated-bg ($length * 10s) ease infinite
+//   background        linear-gradient(45deg, $colors)
+//   background-size   ($length * 200%) ($length * 200%)
+
+@keyframes animated-bg
+  0%
+    background-position 0% 50%
+  50%
+    background-position 100% 50%
+  100%
+    background-position:0% 50%
