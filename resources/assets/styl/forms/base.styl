@@ -1,0 +1,9 @@
+$placeholder-selectors = '::-webkit-input-placeholder', ':-moz-placeholder', '::-moz-placeholder', ':-ms-input-placegolder', '::-ms-input-placeholder'
+
+button, input, optgroup, select, textarea
+  font-family $font-family
+  font-size $font-size
+
+for $selector in $placeholder-selectors
+  { $selector }
+    color rgba(#4a4a4a, 0.5)

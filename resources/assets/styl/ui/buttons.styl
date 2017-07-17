@@ -1,0 +1,20 @@
+.Button
+  background #09f
+  font-size 1.2em
+  position relative
+  button
+    background transparent
+    border none
+    cursor pointer
+    display block
+    padding $button-padding
+    width 100%
+  &.is-primary
+    background #09f
+  &.is-loading
+    background rgba(#09f, .5)
+    button
+      visibility hidden
+  .Button-loader
+    center-vh()
+    display block
