@@ -15,6 +15,7 @@ export default {
   entry: {
     vendor: ['vue', 'lodash', 'axios'],
     app: [
+      path.join(srcPath, 'styl/bulma.scss'),
       path.join(srcPath, 'styl/app.styl'),
       path.join(srcPath, 'js/app.js')
     ]

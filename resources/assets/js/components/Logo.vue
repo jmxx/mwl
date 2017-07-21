@@ -1,6 +1,8 @@
 <template>
   <div class="Logo">
-    <span>made</span><span>with</span><span>love</span>
+    <a href="#">
+      <span>made</span><span>with</span><span>love</span>
+    </a>
   </div>
 </template>
 

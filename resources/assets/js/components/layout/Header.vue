@@ -1,11 +1,13 @@
 <template>
   <div class="Header is-fixed">
     <div class="fluid-container">
-      <div class="">
-        <logo />
-      </div>
-      <div class="">
-        <m-menu></m-menu>
+      <div class="columns is-gapless is-vcentered">
+        <div class="column">
+          <logo />
+        </div>
+        <div class="column">
+          <m-menu></m-menu>
+        </div>
       </div>
     </div>
   </div>
