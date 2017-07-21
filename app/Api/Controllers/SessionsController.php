@@ -22,6 +22,14 @@ class SessionsController extends BaseController
     $this->auth = $auth;
   }
 
+  public function index()
+  {
+    return [
+      'status' => 'ok',
+      'user' => $this->auth->user()
+    ];
+  }
+
   /**
    * Create a new user instance after a valid registration.
    *
@@ -30,7 +38,11 @@ class SessionsController extends BaseController
    */
   protected function store(Request $request)
   {
-    $credentials = $request->only('email', 'password');
+    $username = $request->input('username');
+    $field = filter_var($username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+    $request->merge([$field => $username]);
+
+    $credentials = $request->only($field, 'password');
 
     return $this->requestToken($credentials);
   }
