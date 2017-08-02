@@ -1,5 +1,6 @@
 import Vue        from 'vue';
 import VueRouter  from 'vue-router';
+import auth from '@/core/auth';
 
 const About = { template: '<div>About</div>' };
 /**
@@ -35,12 +36,34 @@ Vue.component('logo', require('./components/Logo.vue'));
 
 const router = new VueRouter({
   routes: [
-    { path: '/login', component: LoginComponent },
+    { path: '/login', name: 'login', component: LoginComponent },
     { path: '/about', component: About }
   ]
 });
 
+auth.on.loginConfirmed((user) => {
+  console.log('login', user);
+});
+
+router.beforeEach((to, from, next) => {
+  if ('login' === to.name) {
+    return next();
+  }
+
+  auth.user()
+    .then((user) => {
+      next();
+    })
+    .catch((err)=> {
+      next('/login');
+    });
+});
+
 
 const app = new Vue({
+  beforeMount() {
+    console.log('before mount');
+  },
+
   router
 }).$mount('#app');

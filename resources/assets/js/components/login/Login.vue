@@ -44,8 +44,8 @@ export default {
 
       auth.login(this.credentials)
         .then((user) => {
-          console.log(user);
           this.loading = false;
+          this.$router.push('/about');
         })
         .catch((err) => {
           console.log('err', err.response.status);
@@ -57,6 +57,7 @@ export default {
       // setTimeout(() => {
       //   this.loading = false;
       // }, 2000);
+      return false;
     },
   },
   mounted() {
