@@ -1,6 +1,4 @@
-<?php
-
-namespace MWL\Providers;
+<?php namespace MWL\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;

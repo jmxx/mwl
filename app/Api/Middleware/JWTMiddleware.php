@@ -19,7 +19,15 @@ class JWTMiddleware extends BaseMiddleware
    */
   public function handle(Request $request, Closure $next, $guard = null)
   {
-    if (! $token = $request->cookie('jwt_token')) {
+    /**
+     * Check if request is login
+     * @var [type]
+     */
+    if ($request->is('api/login')) {
+      return $next($request);
+    }
+
+    if (!$token = $request->cookie('jwt_token')) {
       return response()->json([
         'status' => 'error',
         'message' => 'Token is missing'
