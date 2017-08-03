@@ -36,7 +36,7 @@ Vue.component('logo', require('./components/Logo.vue'));
 
 const router = new VueRouter({
   routes: [
-    { path: '/login', name: 'login', component: LoginComponent },
+    { path: '/login', name: 'login', component: LoginComponent, meta: { allowGuests: true } },
     { path: '/about', component: About }
   ]
 });
@@ -46,7 +46,7 @@ auth.on.loginConfirmed((user) => {
 });
 
 router.beforeEach((to, from, next) => {
-  if ('login' === to.name) {
+  if (to.matched.some(record => record.meta.allowGuests)) {
     return next();
   }
 
@@ -55,7 +55,10 @@ router.beforeEach((to, from, next) => {
       next();
     })
     .catch((err)=> {
-      next('/login');
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      });
     });
 });
 

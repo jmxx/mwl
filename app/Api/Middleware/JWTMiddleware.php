@@ -9,6 +9,15 @@ use Tymon\JWTAuth\Middleware\BaseMiddleware;
 
 class JWTMiddleware extends BaseMiddleware
 {
+
+  public $allowRoutes = [
+    'api/login'
+  ];
+
+  protected function isAllowedRequest(Request $request) {
+    return $request->is(...$this->allowRoutes);
+  }
+
   /**
    * Handle an incoming request.
    *
@@ -23,7 +32,7 @@ class JWTMiddleware extends BaseMiddleware
      * Check if request is login
      * @var [type]
      */
-    if ($request->is('api/login')) {
+    if ($this->isAllowedRequest($request)) {
       return $next($request);
     }
 
