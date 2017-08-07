@@ -14,11 +14,13 @@ const About = { template: '<div>About</div>' };
 require('./bootstrap');
 
 Vue.use(VueRouter);
+Vue.use(Vuelidate);
 
 window.Vue = Vue;
 
 
 const LoginComponent = require('./components/login/Login.vue');
+const SignupComponent = require('./components/signup/Signup.vue');
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -37,6 +39,7 @@ Vue.component('logo', require('./components/Logo.vue'));
 const router = new VueRouter({
   routes: [
     { path: '/login', name: 'login', component: LoginComponent, meta: { allowGuests: true } },
+    { path: '/signup', name: 'signup', component: SignupComponent, meta: { allowGuests: true } },
     { path: '/about', component: About }
   ]
 });

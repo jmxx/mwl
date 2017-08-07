@@ -16,7 +16,8 @@ export default {
   computed: {
     classes() {
       return {
-        'is-loading': this.loading
+        'is-loading': this.loading,
+        'is-disabled': this.disabled,
       };
     }
   },
@@ -25,6 +26,10 @@ export default {
   },
   props: {
     loading: {
+      default: false,
+      required: false,
+    },
+    disabled: {
       default: false,
       required: false,
     },

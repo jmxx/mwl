@@ -4,7 +4,7 @@
       <router-link to="/login">Login</router-link>
     </li>
     <li class="Menu-item">
-      <router-link to="/about">About</router-link>
+      <router-link to="/signup">Signup</router-link>
     </li>
   </ul>
 </template>

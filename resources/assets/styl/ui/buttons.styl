@@ -11,10 +11,17 @@
     width 100%
   &.is-primary
     background #09f
+    button
+      color white
   &.is-loading
     background rgba(#09f, .5)
     button
       visibility hidden
+  &.is-disabled
+    background rgba(#09f, .5)
+    button
+      color white
+      cursor default
   .Button-loader
     center-vh()
     display block

@@ -5,24 +5,26 @@
         <div class="Login">
           <form class="Form">
             <div class="Form-element is-text-center">
-              <input type="text" name="username" placeholder="Username" v-model="credentials.username">
+              <input type="text" name="username" placeholder="Username" v-model.trim="credentials.username" @input="$v.credentials.username.$touch()">
             </div>
             <div class="Form-element is-text-center">
-              <input type="password" name="password" placeholder="Password" v-model="credentials.password">
+              <input type="password" name="password" placeholder="Password" v-model.trim="credentials.password" @input="$v.credentials.password.$touch()">
             </div>
             <div class="Form-actions is-text-center">
               <!-- <input class="Button" type="submit" name="" value="Iniciar Sesión"> -->
-              <m-button :onClick="submit" :loading="loading">Iniciar Sesión</m-button>
+              <m-button :class="'is-primary'" :onClick="submit" :loading="loading" :disabled="$v.credentials.$invalid">
+                Iniciar Sesión
+              </m-button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
+import { minLength, required } from 'vuelidate/lib/validators'
 import auth from '@/core/auth';
 
 export default {
@@ -35,12 +37,20 @@ export default {
       }
     };
   },
+  validations: {
+    credentials: {
+      username: {
+        required
+      },
+      password: {
+        minLength: minLength(8),
+        required
+      }
+    }
+  },
   methods: {
     submit() {
       this.loading = true;
-
-      console.log(this.credentials);
-      // console.log(this.username);
 
       auth.login(this.credentials)
         .then((user) => {

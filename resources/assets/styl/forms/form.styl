@@ -18,3 +18,15 @@
   &.is-text-center
     input, textarea
       text-align center
+  &.has-errors
+    input, textarea
+      border 1px solid red
+      &:focus ~ .Form-error-message, &:hover ~ .Form-error-message
+        display block
+  .Form-error-message
+    display none
+    left 100%
+    position absolute
+    top 50%
+    transform translateY(-50%)
+    white-space nowrap
