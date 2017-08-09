@@ -28,15 +28,15 @@ class UsersController extends BaseController
    */
   protected function store(Request $request)
   {
-    $valid = $this->validate($request, (new UserValidator)->rules());
-
-    // return [];
+    $this->validate($request, (new UserValidator)->rules());
 
     User::create([
-        'name' => 'example',
-        'username' => 'example',
-        'email' => 'example@example.com',
-        'password' => bcrypt('password'),
+      'email' => $request->email,
+      'password' => bcrypt($request->password),
     ]);
+
+    return [
+      'status' => 'ok'
+    ];
   }
 }
