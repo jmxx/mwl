@@ -11,7 +11,8 @@ class JWTMiddleware extends BaseMiddleware
 {
 
   public $allowRoutes = [
-    'api/login'
+    'api/login',
+    'api/register',
   ];
 
   protected function isAllowedRequest(Request $request) {
