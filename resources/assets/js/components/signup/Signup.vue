@@ -17,9 +17,9 @@
               <span class="Form-error-message" v-if="!$v.user.password.required">Este campo es requerido</span>
               <span class="Form-error-message" v-if="!$v.user.password.minLength">Password debe contener al menos 8 caracteres</span>
             </div>
-            <div class="Form-element is-text-center" :class="{ 'has-errors': $v.user.password_confirm.$error }">
-              <input type="password" name="password" placeholder="Password Confirmation" v-model="user.password_confirm" @input="$v.user.password_confirm.$touch()">
-              <span class="Form-error-message" v-if="!$v.user.password_confirm.sameAsPassword">Confirmación de password no es identica</span>
+            <div class="Form-element is-text-center" :class="{ 'has-errors': $v.user.password_confirmation.$error }">
+              <input type="password" name="password" placeholder="Password Confirmation" v-model="user.password_confirmation" @input="$v.user.password_confirmation.$touch()">
+              <span class="Form-error-message" v-if="!$v.user.password_confirmation.sameAsPassword">Confirmación de password no es identica</span>
             </div>
             <div class="Form-actions is-text-center">
               <!-- <input class="Button" type="submit" name="" value="Iniciar Sesión"> -->
@@ -48,7 +48,7 @@ export default {
       user: {
         email: '',
         password: '',
-        password_confirm: '',
+        password_confirmation: '',
       }
     }
   },
@@ -62,7 +62,7 @@ export default {
         minLength: minLength(8),
         required
       },
-      password_confirm: {
+      password_confirmation: {
         sameAsPassword: sameAs('password')
       }
     }

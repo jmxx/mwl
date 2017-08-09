@@ -1,5 +1,7 @@
 import Vue        from 'vue';
 import VueRouter  from 'vue-router';
+import Vuelidate  from 'vuelidate';
+
 import auth from '@/core/auth';
 
 const About = { template: '<div>About</div>' };
