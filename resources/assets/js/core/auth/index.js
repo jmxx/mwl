@@ -71,6 +71,20 @@ let auth = {
     }
 
     return auth.check();
+  },
+
+  logout() {
+    return request('auth').logout().then((response) => {
+      if ('ok' === response.data.status) {
+        user = null;
+
+        auth.events.userUnauthenticated();
+      }
+
+      return true;
+    }, (error) => {
+
+    });
   }
 }
 

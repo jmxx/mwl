@@ -47,6 +47,17 @@ class SessionsController extends BaseController
     return $this->requestToken($credentials);
   }
 
+  protected function destroy(Request $request)
+  {
+    $this->auth->logout();
+
+    // $request->session()->invalidate();
+
+    return [
+      'status' => 'ok'
+    ];
+  }
+
   protected function requestToken(array $credentials)
   {
     try {

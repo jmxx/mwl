@@ -6,6 +6,9 @@
     <li class="Menu-item">
       <router-link to="/signup">Signup</router-link>
     </li>
+    <li class="Menu-item">
+      <router-link to="/logout">Log out</router-link>
+    </li>
   </ul>
 </template>
 

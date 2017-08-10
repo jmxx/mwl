@@ -37,11 +37,17 @@ Vue.component('m-button', require('./components/ui/Button.vue'));
 Vue.component('m-footer', require('./components/layout/Footer.vue'));
 Vue.component('logo', require('./components/Logo.vue'));
 
+function logout(to, from, next) {
+  auth.logout();
+
+  return next({ name: 'login' });
+}
 
 const router = new VueRouter({
   routes: [
     { path: '/login', name: 'login', component: LoginComponent, meta: { allowGuests: true } },
     { path: '/signup', name: 'signup', component: SignupComponent, meta: { allowGuests: true } },
+    { path: '/logout', name: 'logout', beforeEnter: logout },
     { path: '/about', component: About }
   ]
 });
@@ -50,8 +56,18 @@ auth.on.loginConfirmed((user) => {
   console.log('login', user);
 });
 
+auth.on.userUnauthenticated((user) => {
+  console.log('logout', user);
+});
+
 router.beforeEach((to, from, next) => {
+  console.log('before');
+
   if (to.matched.some(record => record.meta.allowGuests)) {
+    return next();
+  }
+
+  if ('logout' === to.name) {
     return next();
   }
 
