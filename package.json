@@ -1,8 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "serve": "babel-node webpack/serve.js",
-    "dev": "webpack --config webpack/config/webpack.dev.babel.js",
+    "dev": "babel-node webpack/serve.js",
     "dist": "NODE_ENV=production webpack --progress --config webpack/config/webpack.dist.babel.js"
   },
   "devDependencies": {

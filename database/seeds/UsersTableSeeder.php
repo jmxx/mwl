@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
       'name' => 'Juan Manuel Reynoso',
       'username' => 'jmxx',
       'email' => 'jmxx@mwl.mx',
-      'password' => bcrypt('pass123'),
+      'password' => bcrypt('pass1234'),
       'created_at' => new DateTime,
       'updated_at' => new DateTime
     ]);
