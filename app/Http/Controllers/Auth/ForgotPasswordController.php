@@ -1,6 +1,4 @@
-<?php
-
-namespace MWL\Http\Controllers\Auth;
+<?php namespace MWL\Http\Controllers\Auth;
 
 use MWL\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;

@@ -1,6 +1,4 @@
-<?php
-
-namespace MWL\Providers;
+<?php namespace MWL\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

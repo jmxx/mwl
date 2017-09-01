@@ -1,6 +1,4 @@
-<?php
-
-namespace MWL\Http\Controllers;
+<?php namespace MWL\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
