@@ -52,13 +52,12 @@ export default {
     submit() {
       this.loading = true;
 
-      auth.login(this.credentials)
+      this.$auth.login(this.credentials)
         .then((user) => {
           this.loading = false;
           this.$router.push('/about');
         })
         .catch((err) => {
-          console.log('err', err.response.status);
           this.loading = false;
         });
 

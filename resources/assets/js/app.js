@@ -2,7 +2,7 @@ import Vue        from 'vue';
 import VueRouter  from 'vue-router';
 import Vuelidate  from 'vuelidate';
 
-import auth from '@/core/auth';
+import Auth       from '@/core/auth';
 
 const About = { template: '<div>About</div>' };
 /**
@@ -11,15 +11,13 @@ const About = { template: '<div>About</div>' };
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-
-
 require('./bootstrap');
 
 Vue.use(VueRouter);
 Vue.use(Vuelidate);
+Vue.use(Auth);
 
 window.Vue = Vue;
-
 
 const LoginComponent = require('./components/login/Login.vue');
 const SignupComponent = require('./components/signup/Signup.vue');
@@ -37,12 +35,6 @@ Vue.component('m-button', require('./components/ui/Button.vue'));
 Vue.component('m-footer', require('./components/layout/Footer.vue'));
 Vue.component('logo', require('./components/Logo.vue'));
 
-function logout(to, from, next) {
-  auth.logout();
-
-  return next({ name: 'login' });
-}
-
 const router = new VueRouter({
   routes: [
     { path: '/login', name: 'login', component: LoginComponent, meta: { allowGuests: true } },
@@ -52,17 +44,13 @@ const router = new VueRouter({
   ]
 });
 
-auth.on.loginConfirmed((user) => {
-  console.log('login', user);
-});
+function logout(to, from, next) {
+  router.app.$auth.logout();
 
-auth.on.userUnauthenticated((user) => {
-  console.log('logout', user);
-});
+  return next({ name: 'login' });
+}
 
 router.beforeEach((to, from, next) => {
-  console.log('before');
-
   if (to.matched.some(record => record.meta.allowGuests)) {
     return next();
   }
@@ -71,7 +59,7 @@ router.beforeEach((to, from, next) => {
     return next();
   }
 
-  auth.user()
+  router.app.$auth.getUser()
     .then((user) => {
       next();
     })
@@ -87,6 +75,18 @@ router.beforeEach((to, from, next) => {
 const app = new Vue({
   beforeMount() {
     console.log('before mount');
+
+    this.$auth.on.loginConfirmed((user) => {
+      console.log('login', user);
+    });
+
+    this.$auth.on.userUnauthenticated((user) => {
+      console.log('logout', user);
+    });
+  },
+
+  mounted() {
+
   },
 
   router

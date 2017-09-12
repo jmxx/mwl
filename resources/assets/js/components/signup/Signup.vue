@@ -39,8 +39,6 @@
 import { email, minLength, required, sameAs } from 'vuelidate/lib/validators';
 import users from '@/core/users';
 
-console.log(email);
-
 export default {
   data() {
     return {
