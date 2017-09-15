@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="Button" :class="classes">
-    <button type="submit" name="button"  @click="onClick" :disabled="loading">
+    <button type="submit" name="button"  @click="onClick" :disabled="loading || disabled">
       <slot>Aceptar</slot>
     </button>
     <div class="Button-loader" v-show="loading">
