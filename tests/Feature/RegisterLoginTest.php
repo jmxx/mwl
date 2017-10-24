@@ -5,7 +5,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RegisterLoginTest extends TestCase
-{  
+{
   public $user = [
     'email' => 'test@test.dev',
     'password' => '123456'
@@ -30,6 +30,21 @@ class RegisterLoginTest extends TestCase
     ]);
   }
 
+  public function test_user_login_success()
+  {
+    $response = $this->json('POST', '/api/login', [
+      'email' => $this->user['email'],
+      'password' => $this->user['password']
+    ]);
+
+    $response
+      ->assertStatus(200)
+      ->assertJson([
+        'status' => 'success'
+      ])
+      ->assertCookie('jwt_token');
+  }
+
   public function test_user_registration_duplicated()
   {
     $response = $this->json('POST', '/api/register', [
@@ -51,6 +66,20 @@ class RegisterLoginTest extends TestCase
     $this->assertDatabaseHas('users', [
       'email' => $this->user['email']
     ]);
+  }
+
+  public function test_user_login_unauthorized()
+  {
+    $response = $this->json('POST', '/api/login', [
+      'email' => $this->user['email'],
+      'password' => 'wrong_password'
+    ]);
+
+    $response
+      ->assertStatus(401)
+      ->assertJson([
+        'status' => 'error'
+      ]);
   }
 
   public function tearDown()
