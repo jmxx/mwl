@@ -1,11 +1,14 @@
 <?php namespace MWL\Api\Middleware;
 
 use Closure;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Middleware\BaseMiddleware;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Http\Parser\Cookies as JWTCookies;
 
 class JWTMiddleware extends BaseMiddleware
 {
@@ -29,6 +32,8 @@ class JWTMiddleware extends BaseMiddleware
    */
   public function handle(Request $request, Closure $next, $guard = null)
   {
+    $user = false;
+
     /**
      * Check if request is login
      * @var [type]
@@ -45,7 +50,8 @@ class JWTMiddleware extends BaseMiddleware
     }
 
     try {
-      $user = $this->auth->authenticate($token);
+      $this->auth->parser()->setChain([ (new JWTCookies)->setKey('jwt_token') ]);
+      $user = $this->auth->parseToken()->authenticate( /*$token*/ );
     } catch (TokenExpiredException $e) {
 
     } catch (TokenInvalidException $e) {
@@ -58,7 +64,7 @@ class JWTMiddleware extends BaseMiddleware
       return response()->json([
         'status' => 'error',
         'message' => 'User not found'
-      ]);
+      ], 404);
     }
 
 

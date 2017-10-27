@@ -61,7 +61,7 @@ class SessionsController extends BaseController
   protected function requestToken(array $credentials)
   {
     try {
-      if (! $token = JWTAuth::attempt($credentials)) {
+      if (! $token = $this->auth->attempt($credentials)) {
         return response()->json([
           'status'  => 'error',
           'message' => 'Invalid credentials'
