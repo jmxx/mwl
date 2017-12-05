@@ -17,7 +17,12 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::get('/user', 'SessionsController@index')->name('api.auth.user');
-Route::post('/register', 'UsersController@store')->name('api.auth.register');
+Route::post('/users/register', 'UsersController@register')->name('api.users.register');
+Route::apiResource('users', 'UsersController', [
+  'names' => [
+    'store' => 'api.users.store',
+  ]
+]);
+
 Route::post('/login', 'SessionsController@store')->name('api.auth.login');
 Route::post('/logout', 'SessionsController@destroy')->name('api.auth.logout');

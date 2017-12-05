@@ -18,7 +18,7 @@ class Handler extends ExceptionHandler
         // \Symfony\Component\HttpKernel\Exception\HttpException::class,
         // \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         // \Illuminate\Session\TokenMismatchException::class,
-        // \Illuminate\Validation\ValidationException::class,
+        \Illuminate\Validation\ValidationException::class,
     ];
 
     /**
@@ -72,23 +72,23 @@ class Handler extends ExceptionHandler
     //     return redirect()->guest(route('login'));
     // }
 
-  // protected function convertValidationExceptionToResponse(ValidationException $e, $request)
-  // {
-  //   // if ($e->response) {
-  //   //   return $e->response;
-  //   // }
-  //
-  //   $errors = $e->validator->errors()->getMessages();
-  //
-  //   if ($request->expectsJson()) {
-  //     return response()->json([
-  //       'errors' => $errors,
-  //       'status' => 'error'
-  //     ], 422);
-  //   }
-  //
-  //   return redirect()->back()->withInput(
-  //     $request->input()
-  //   )->withErrors($errors);
-  // }
+  protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+  {
+    if ($e->response) {
+      return $e->response;
+    }
+
+    $errors = $e->validator->errors()->getMessages();
+
+    if ($request->expectsJson()) {
+      return response()->json([
+        'errors' => $errors,
+        'status' => 'error'
+      ], 422);
+    }
+
+    return redirect()->back()->withInput(
+      $request->input()
+    )->withErrors($errors);
+  }
 }
