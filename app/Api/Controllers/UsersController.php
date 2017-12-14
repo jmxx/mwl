@@ -15,6 +15,8 @@ use \Illuminate\Validation\ValidationException;
 class UsersController extends BaseController
 {
 
+  protected $tokenHeaderName = 'X-Registration-From-Token';
+
   /**
    * Create a new controller instance.
    *
@@ -37,15 +39,9 @@ class UsersController extends BaseController
     }
   }
 
-  /**
-   * Create a new user instance after a valid registration.
-   *
-   * @param  array  $data
-   * @return User
-   */
-  protected function store(Request $request)
+  private function preValidateRequest(Request $request)
   {
-    $registrationFromToken = !!$request->header('X-Registration-From-Token');
+    $registrationFromToken = !!$request->header($this->tokenHeaderName);
 
     if ($registrationFromToken) {
       $data = $this->tokenValidation->validateToken($request->token);
@@ -54,34 +50,84 @@ class UsersController extends BaseController
         return response()->json([
           'status'  => 'error',
           'message' => 'Invalid email validation token'
-        ], 400);
+        ], 400)->throwResponse();
       }
 
       if (Carbon::createFromTimestamp($data->exp)->isPast()) {
         return response()->json([
           'status' => 'error',
           'message' => 'Token expired'
-        ], 400);
+        ], 400)->throwResponse();
       }
 
       $this->validateEmail($data->email);
 
-      User::create([
-        // 'name' => 'example',
-        // 'username' => 'example',
-        'email' => $data->email,
-        'password' => bcrypt($data->email),
-      ]);
-
-      return response()->json([
-        'status' => 'ok'
-      ], 200);
+      return $data;
     }
 
     return response()->json([
       'status' => 'error',
       'message' => 'We only accept token registrations'
-    ], 400);
+    ], 400)->throwResponse();
+  }
+
+  protected function validateToken(Request $request)
+  {
+    $data = $this->preValidateRequest($request);
+
+    if (!!$data) {
+      return response()->json([
+        'status' => 'token_valid',
+        'email' => $data->email
+      ], 200);
+    }
+  }
+
+  /**
+   * Create a new user instance after a valid registration.
+   *
+   * @param  array  $data
+   * @return User
+   */
+  protected function store(Request $request)
+  {
+    $data = $this->preValidateRequest($request);
+
+    if (!!$data) {
+      if ($request->email !== $data->email) {
+        return response()->json([
+          'status' => 'error',
+          'errors' => [
+            'email' => [
+              'Email does not match the token'
+            ]
+          ],
+        ], 422);
+      }
+
+      if ($request->password !== $request->password_confirmation) {
+        return response()->json([
+          'status' => 'error',
+          'errors' => [
+            'password_confirmation' => [
+              'Password confirmation is not valid'
+            ]
+          ],
+        ], 422);
+      }
+
+      User::create([
+        // 'name' => 'example',
+        // 'username' => 'example',
+        'email' => $data->email,
+        'password' => bcrypt($request->password),
+      ]);
+
+      return response()->json([
+        'status' => 'user_registration_success',
+        'email' => $data->email,
+      ], 200);
+    }
   }
 
   protected function register(Request $request)

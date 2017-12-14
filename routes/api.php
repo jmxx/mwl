@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::post('/users/register', 'UsersController@register')->name('api.users.register');
+Route::post('/users/validate', 'UsersController@validateToken')->name('api.users.validate');
 Route::apiResource('users', 'UsersController', [
   'names' => [
     'store' => 'api.users.store',

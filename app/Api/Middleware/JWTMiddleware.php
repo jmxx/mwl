@@ -17,7 +17,8 @@ class JWTMiddleware extends BaseMiddleware
     'users.index',
     'api.auth.login',     // POST api/login
     'api.users.store',    // POST api/users
-    'api.users.register'  // POST api/users/register
+    'api.users.register', // POST api/users/register
+    'api.users.validate'  // POST api/users/validate
   ];
 
   protected function isAllowedRequest(Request $request) {

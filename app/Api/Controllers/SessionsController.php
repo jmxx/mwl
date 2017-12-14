@@ -75,7 +75,7 @@ class SessionsController extends BaseController
     }
 
     return response()->json([
-      'status' => 'success'
+      'status' => 'ok'
     ])->cookie('jwt_token', $token, 120, null, null, false, true);
   }
 }

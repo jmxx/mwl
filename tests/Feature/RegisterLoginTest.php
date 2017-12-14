@@ -48,19 +48,17 @@ class RegisterLoginTest extends TestCase
     $response = $this->withHeaders([
         'X-Registration-From-Token' => true
       ])
-      ->json('POST', '/api/users', [
+      ->json('POST', '/api/users/validate', [
         'token' => self::$user['token'],
       ]);
 
     $response
       ->assertStatus(200)
       ->assertJson([
-        'status' => 'ok'
+        'status' => 'token_valid',
+        'email' => self::$user['email']
       ]);
 
-    $this->assertDatabaseHas('users', [
-      'email' => self::$user['email']
-    ]);
   }
 
   /**
@@ -68,7 +66,7 @@ class RegisterLoginTest extends TestCase
    */
   public function test_validate_email_token_without_header()
   {
-    $response = $this->json('POST', '/api/users', [
+    $response = $this->json('POST', '/api/users/validate', [
         'token' => self::$user['token'],
       ]);
 
@@ -86,7 +84,7 @@ class RegisterLoginTest extends TestCase
   {
     $response = $this->withHeaders([
         'X-Registration-From-Token' => true
-      ])->json('POST', '/api/users', [
+      ])->json('POST', '/api/users/validate', [
         'token' => self::$user['token'] . 'invalid',
       ]);
 
@@ -96,6 +94,100 @@ class RegisterLoginTest extends TestCase
         'status' => 'error',
         'message' => 'Invalid email validation token'
       ]);
+  }
+
+  /**
+   * @depends test_validate_email_token_success
+   */
+  public function test_register_user_password_unconfirmed()
+  {
+    $response = $this->withHeaders([
+        'X-Registration-From-Token' => true
+      ])
+      ->json('POST', '/api/users', [
+        'token' => self::$user['token'],
+        'email' => self::$user['email'],
+        'password' => self::$user['password'],
+        'password_confirmation' => self::$user['password'] . '123',
+      ]);
+
+    $response
+      ->assertStatus(422)
+      ->assertJson([
+        'status' => 'error',
+        'errors' => [
+          'password_confirmation' => [
+            'Password confirmation is not valid'
+          ]
+        ]
+      ]);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => self::$user['email']
+    ]);
+  }
+
+  /**
+   * @depends test_validate_email_token_success
+   */
+  public function test_register_user_email_token_unmatched()
+  {
+    $response = $this->withHeaders([
+        'X-Registration-From-Token' => true
+      ])
+      ->json('POST', '/api/users', [
+        'token' => self::$user['token'],
+        'email' => 'another@email.com',
+        'password' => self::$user['password'],
+        'password_confirmation' => self::$user['password'],
+      ]);
+
+    $response
+      ->assertStatus(422)
+      ->assertJson([
+        'status' => 'error',
+        'errors' => [
+          'email' => [
+            'Email does not match the token'
+          ]
+        ]
+      ]);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => self::$user['email']
+    ]);
+  }
+
+  /**
+   * @depends test_validate_email_token_success
+   */
+  public function test_register_user_success()
+  {
+    $response = $this->withHeaders([
+        'X-Registration-From-Token' => true
+      ])
+      ->json('POST', '/api/users', [
+        'token' => self::$user['token'],
+        'email' => self::$user['email'],
+        'password' => self::$user['password'],
+        'password_confirmation' => self::$user['password'],
+      ]);
+
+    $response
+      ->assertStatus(200)
+      ->assertJson([
+        'status' => 'user_registration_success',
+        'email' => self::$user['email']
+      ]);
+
+    $this->assertDatabaseHas('users', [
+      'email' => self::$user['email']
+    ]);
+
+    $this->assertDatabaseMissing('users', [
+      'email' => self::$user['email'],
+      'password' => self::$user['password']
+    ]);
   }
 
   /**
@@ -171,9 +263,45 @@ class RegisterLoginTest extends TestCase
     ]);
   }
 
+  /**
+   * @depends test_register_user_success
+   */
+  public function test_user_login_unauthorized()
+  {
+    $response = $this->json('POST', '/api/login', [
+      'username' => self::$user['email'],
+      'password' => 'wrong_password'
+    ]);
+
+    $response
+      ->assertStatus(401)
+      ->assertJson([
+        'status' => 'error'
+      ])
+      ->assertCookieMissing('jwt_token');
+  }
+
+  /**
+   * @depends test_register_user_success
+   */
+  public function test_user_login()
+  {
+    $response = $this->json('POST', '/api/login', [
+      'username' => self::$user['email'],
+      'password' => self::$user['password']
+    ]);
+
+    $response
+      ->assertStatus(200)
+      ->assertJson([
+        'status' => 'ok',
+      ])
+      ->assertCookie('jwt_token');
+  }
+
   public function tearDown()
   {
-    if ('test_validate_email_token_duplicated' === $this->getName()) {
+    if ('test_user_login' === $this->getName()) {
       User::where('email', self::$user['email'])->delete();
     }
   }
